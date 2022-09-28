@@ -20,7 +20,6 @@ type Font = {
   fontSize: string;
   marginBottom: string;
   lineHeight: string;
-  maxCharacters: number;
 };
 
 const fonts: Font[] = [
@@ -29,29 +28,25 @@ const fonts: Font[] = [
     fontSize: "1.5em",
     marginBottom: "-15px",
     lineHeight: "1.8em",
-    maxCharacters: 48,
-  },
-  {
-    fontFamily: "AlexBrush",
-    fontSize: "2em",
-    marginBottom: "-10px",
-    lineHeight: "1.1em",
-    maxCharacters: 58,
-  },
-  {
-    fontFamily: "Rochester",
-    fontSize: "2em",
-    marginBottom: "-3px",
-    lineHeight: "1.05em",
-    maxCharacters: 55,
   },
   {
     fontFamily: "Dawning_of_a_New_Day",
     fontSize: "2em",
     marginBottom: "-6px",
     lineHeight: "1.1em",
-    maxCharacters: 50,
-  }
+  },
+  {
+    fontFamily: "AlexBrush",
+    fontSize: "2em",
+    marginBottom: "-10px",
+    lineHeight: "1.1em",
+  },
+  {
+    fontFamily: "Rochester",
+    fontSize: "2em",
+    marginBottom: "-3px",
+    lineHeight: "1.05em",
+  },
 ];
 
 function App() {
@@ -60,8 +55,10 @@ function App() {
   There was a man sent from God, whose name was John. He came as a witness, to bear witness about the light, that all might believe through him. He was not the light, but came to bear witness about the light.
   The true light, which gives light to everyone, was coming into the world. He was in the world, and the world was made through him, yet the world did not know him. He came to his own, and his own people did not receive him. But to all who did receive him, who believed in his name, he gave the right to become children of God, who were born, not of blood nor of the will of the flesh nor of the will of man, but of God.`);
   const [currentFont, setCurrentFont] = useState<Font>(fonts[0]);
+  const [blankLines, setBlankLines] = useState<number>(1);
+  const [maxCharacters, setMaxCharacters] = useState<number>(45);
 
-  const lines = splitter(text, currentFont.maxCharacters);
+  const lines = splitter(text, maxCharacters);
 
   return (
     <div className="App">
@@ -88,11 +85,40 @@ function App() {
             </select>
           </label>
         </div>
-        <textarea
-          onChange={(event) => {
-            setText(event.target.value);
-          }}
-        ></textarea>
+        <div>
+          <label>
+            Text
+            <textarea
+              onChange={(event) => {
+                setText(event.target.value);
+              }}
+            ></textarea>
+          </label>
+        </div>
+        <div>
+          <label>
+            Blank lines
+            <input
+              type="number"
+              value={blankLines}
+              onChange={(event) => {
+                setBlankLines(Math.max(parseInt(event.target.value, 10), 0) || 0);
+              }}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Max characters per line
+            <input
+              type="number"
+              value={maxCharacters}
+              onChange={(event) => {
+                setMaxCharacters(Math.max(parseInt(event.target.value, 10), 0) || 45);
+              }}
+            />
+          </label>
+        </div>
       </section>
       <section>
         <div
@@ -114,15 +140,20 @@ function App() {
                 >
                   <span>{line}</span>
                 </div>
-                <div
-                  className="BlankLine"
-                  style={{
-                    fontFamily: currentFont.fontFamily,
-                    marginBottom: currentFont.marginBottom,
-                  }}
-                >
-                  <span>&nbsp;</span>
-                </div>
+                {Array.from(Array(blankLines).keys()).map((index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="BlankLine"
+                      style={{
+                        fontFamily: currentFont.fontFamily,
+                        marginBottom: currentFont.marginBottom,
+                      }}
+                    >
+                      <span>&nbsp;</span>
+                    </div>
+                  );
+                })}
               </div>
             );
           })}
