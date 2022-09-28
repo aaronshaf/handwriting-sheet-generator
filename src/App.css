@@ -1,0 +1,49 @@
+.App {
+  margin: 24px;
+}
+
+@font-face {
+  font-family: AlexBrush;
+  src: url(/fonts/AlexBrush/AlexBrush-Regular.ttf);
+}
+
+@font-face {
+  font-family: HomemadeApple;
+  src: url(/fonts/HomemadeApple/HomemadeApple-Regular.ttf);
+}
+
+@font-face {
+  font-family: Rochester;
+  src: url(/fonts/Rochester/Rochester-Regular.ttf)
+}
+
+@font-face {
+  font-family: Dawning_of_a_New_Day;
+  src: url(/fonts/Dawning_of_a_New_Day/DawningofaNewDay-Regular.ttf)
+}
+
+.Settings {
+  margin-bottom: 24px;
+}
+
+.Notebook {
+  font-family: "AlexBrush";
+}
+
+.TextLine {
+  border-top: 1px solid #ccc;
+  vertical-align: text-bottom;
+}
+
+.BlankLine {
+  border-top: 1px solid #ccc;
+}
+
+@media print {
+  .Settings {
+    display: none;
+  }
+  .Line {
+    page-break-inside: avoid;
+  }
+}
