@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState } from "react";
 import "./App.css";
 
 function splitter(str: string, l: number) {
@@ -57,6 +57,7 @@ function App() {
   const [currentFont, setCurrentFont] = useState<Font>(fonts[0]);
   const [blankLines, setBlankLines] = useState<number>(1);
   const [maxCharacters, setMaxCharacters] = useState<number>(45);
+  const [wordSpacing, setWordSpacing] = useState<number>(7);
 
   const lines = splitter(text, maxCharacters);
 
@@ -64,6 +65,7 @@ function App() {
     <div className="App">
       <section className="Settings">
         <div>
+          <h1 className="text-1xl font-bold underline">Test</h1>
           <label>
             Font:
             <select
@@ -102,7 +104,9 @@ function App() {
               type="number"
               value={blankLines}
               onChange={(event) => {
-                setBlankLines(Math.max(parseInt(event.target.value, 10), 0) || 0);
+                setBlankLines(
+                  Math.max(parseInt(event.target.value, 10), 0) || 0
+                );
               }}
             />
           </label>
@@ -114,7 +118,23 @@ function App() {
               type="number"
               value={maxCharacters}
               onChange={(event) => {
-                setMaxCharacters(Math.max(parseInt(event.target.value, 10), 0) || 45);
+                setMaxCharacters(
+                  Math.max(parseInt(event.target.value, 10), 0) || 45
+                );
+              }}
+            />
+          </label>
+        </div>
+        <div>
+          <label>
+            Word spacing
+            <input
+              type="number"
+              value={wordSpacing}
+              onChange={(event) => {
+                setWordSpacing(
+                  Math.max(parseInt(event.target.value, 10), 0) || 7
+                );
               }}
             />
           </label>
@@ -136,6 +156,7 @@ function App() {
                   style={{
                     fontFamily: currentFont.fontFamily,
                     marginBottom: currentFont.marginBottom,
+                    wordSpacing: `${wordSpacing}px`,
                   }}
                 >
                   <span>{line}</span>
