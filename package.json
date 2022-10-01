@@ -10,7 +10,8 @@
   "dependencies": {
     "daisyui": "^2.31.0",
     "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react-dom": "^18.0.0",
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",
