@@ -217,6 +217,20 @@ function App() {
               </div>
             );
           })}
+          {Array.from(Array(blankLines).keys()).map((index) => {
+            return (
+              <div
+                key={index}
+                className="BlankLine"
+                style={{
+                  fontFamily: currentFont.fontFamily,
+                  marginBottom: currentFont.marginBottom,
+                }}
+              >
+                <span>&nbsp;</span>
+              </div>
+            );
+          })}
         </main>
       )}
     </div>
