@@ -217,7 +217,7 @@ function App() {
               </div>
             );
           })}
-          {Array.from(Array(blankLines).keys()).map((index) => {
+          {Array.from(Array(Math.max(blankLines || 0, 1)).keys()).map((index) => {
             return (
               <div
                 key={index}
