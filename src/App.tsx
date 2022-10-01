@@ -5,15 +5,17 @@ import "./App.css";
 function splitter(str: string, l: number) {
   let lines = [];
   while (str.length > l || str.includes("\n")) {
-    let pos =
-      str.substring(0, l).lastIndexOf(" ");
-    pos = pos <= 0 ? l : pos;
-    lines.push(str.substring(0, pos).replace("\n", ""));
-    let i = str.indexOf(" ", pos) + 1;
-    if (i < pos || i > pos + l) {
-      i = pos;
+    const segment = str.slice(0, l);
+    if (segment.includes("\n")) {
+      lines.push(str.substring(0, segment.indexOf("\n")));
+      str = str.substring(segment.indexOf("\n") + 1);
+    } else if (segment.includes(" ")) {
+      lines.push(str.substring(0, segment.lastIndexOf(" ")));
+      str = str.substring(segment.lastIndexOf(" ") + 1);
+    } else {
+      lines.push(str.substring(0, l));
+      str = str.substring(l);
     }
-    str = str.substring(i);
   }
   lines.push(str);
 
@@ -196,7 +198,7 @@ function App() {
                     wordSpacing: `${wordSpacing}px`,
                   }}
                 >
-                  <span>{line}</span>
+                  <span>{line || <>&nbsp;</>}</span>
                 </div>
                 {Array.from(Array(blankLines).keys()).map((index) => {
                   return (
@@ -217,9 +219,6 @@ function App() {
           })}
         </main>
       )}
-      <pre>
-        <code>{JSON.stringify({ lines }, null, 2)}</code>
-      </pre>
     </div>
   );
 }

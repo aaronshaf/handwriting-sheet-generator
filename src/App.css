@@ -33,6 +33,7 @@
 
 .BlankLine {
   border-top: 1px solid #ccc;
+  vertical-align: text-bottom;
 }
 
 .Settings {
