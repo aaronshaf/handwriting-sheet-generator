@@ -63,85 +63,107 @@ function App() {
 
   return (
     <div className="App">
+      <section className="Nav">
+        <nav className="navbar bg-base-300">
+          <div className="navbar-start">
+            <a className="btn btn-ghost normal-case text-xl">
+              Handwriting Sheet Generator
+            </a>
+          </div>
+          <div className="navbar-end">
+            <button className="btn" onClick={() => window.print()}>
+              Print
+            </button>
+          </div>
+        </nav>
+      </section>
       <section className="Settings">
-        <div>
-          <h1 className="text-1xl font-bold underline">Test</h1>
-          <label>
-            Font:
-            <select
-              onChange={(event) => {
-                setCurrentFont(
-                  fonts.find(
-                    (font) => event.target.value === font.fontFamily
-                  ) || fonts[0]
-                );
-              }}
-            >
-              {fonts.map((font) => {
-                return (
-                  <option key={font.fontFamily} value={font.fontFamily}>
-                    {font.fontFamily}
-                  </option>
-                );
-              })}
-            </select>
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Font</span>
           </label>
+          <select
+            onChange={(event) => {
+              setCurrentFont(
+                fonts.find((font) => event.target.value === font.fontFamily) ||
+                  fonts[0]
+              );
+            }}
+            className="select select-bordered"
+          >
+            {fonts.map((font) => {
+              return (
+                <option key={font.fontFamily} value={font.fontFamily}>
+                  {font.fontFamily}
+                </option>
+              );
+            })}
+          </select>
         </div>
-        <div>
-          <label>
-            Text
-            <textarea
-              onChange={(event) => {
-                setText(event.target.value);
-              }}
-            ></textarea>
+
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Blank lines</span>
           </label>
+          <input
+            className="input input-bordered w-full max-w-xs"
+            type="number"
+            name="blankLines"
+            value={blankLines}
+            onChange={(event) => {
+              setBlankLines(Math.max(parseInt(event.target.value, 10), 0) || 0);
+            }}
+          />
         </div>
-        <div>
-          <label>
-            Blank lines
-            <input
-              type="number"
-              value={blankLines}
-              onChange={(event) => {
-                setBlankLines(
-                  Math.max(parseInt(event.target.value, 10), 0) || 0
-                );
-              }}
-            />
+
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Max characters per line</span>
           </label>
+          <input
+            className="input input-bordered w-full max-w-xs"
+            type="number"
+            value={maxCharacters}
+            onChange={(event) => {
+              setMaxCharacters(
+                Math.max(parseInt(event.target.value, 10), 0) || 45
+              );
+            }}
+          />
         </div>
-        <div>
-          <label>
-            Max characters per line
-            <input
-              type="number"
-              value={maxCharacters}
-              onChange={(event) => {
-                setMaxCharacters(
-                  Math.max(parseInt(event.target.value, 10), 0) || 45
-                );
-              }}
-            />
+
+        <div className="form-control w-full max-w-xs">
+          <label className="label">
+            <span className="label-text">Word spacing</span>
           </label>
+          <input
+            className="input input-bordered w-full max-w-xs"
+            type="number"
+            value={wordSpacing}
+            onChange={(event) => {
+              setWordSpacing(
+                Math.max(parseInt(event.target.value, 10), 0) || 7
+              );
+            }}
+          />
         </div>
-        <div>
-          <label>
-            Word spacing
-            <input
-              type="number"
-              value={wordSpacing}
-              onChange={(event) => {
-                setWordSpacing(
-                  Math.max(parseInt(event.target.value, 10), 0) || 7
-                );
-              }}
-            />
+
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text">Text</span>
           </label>
+          <textarea
+            className="textarea textarea-bordered h-24"
+            placeholder="Text"
+            onChange={(event) => {
+              setText(event.target.value);
+            }}
+          ></textarea>
         </div>
       </section>
-      <section>
-        <div
+
+      {text.length > 0 && (
+        <main
           className="Notebook"
           style={{
             fontSize: currentFont.fontSize,
@@ -178,8 +200,8 @@ function App() {
               </div>
             );
           })}
-        </div>
-      </section>
+        </main>
+      )}
     </div>
   );
 }
