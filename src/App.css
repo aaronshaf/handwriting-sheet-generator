@@ -53,6 +53,6 @@
     page-break-inside: avoid;
   }
   .Notebook {
-    margin: 0;
+    margin: 12px;
   }
 }

@@ -3,17 +3,26 @@ import { useLocalStorage } from "react-use";
 import "./App.css";
 
 function splitter(str: string, l: number) {
-  let strs = [];
-  while (str.length > l) {
-    let pos = str.substring(0, l).lastIndexOf(" ");
+  let lines = [];
+  while (str.length > l || str.includes("\n")) {
+    let pos =
+      str.substring(0, l).lastIndexOf(" ");
     pos = pos <= 0 ? l : pos;
-    strs.push(str.substring(0, pos));
+    lines.push(str.substring(0, pos).replace("\n", ""));
     let i = str.indexOf(" ", pos) + 1;
-    if (i < pos || i > pos + l) i = pos;
+    if (i < pos || i > pos + l) {
+      i = pos;
+    }
     str = str.substring(i);
   }
-  strs.push(str);
-  return strs;
+  lines.push(str);
+
+  // remove last empty line
+  if (lines[lines.length - 1] === "") {
+    lines.pop();
+  }
+
+  return lines;
 }
 
 type Font = {
@@ -162,11 +171,13 @@ function App() {
             onChange={(event) => {
               setText(event.target.value);
             }}
-          ></textarea>
+          >
+            {text}
+          </textarea>
         </div>
       </section>
 
-      {text.length > 0 && (
+      {(text || "").length > 0 && (
         <main
           className="Notebook"
           style={{
@@ -206,6 +217,9 @@ function App() {
           })}
         </main>
       )}
+      <pre>
+        <code>{JSON.stringify({ lines }, null, 2)}</code>
+      </pre>
     </div>
   );
 }
