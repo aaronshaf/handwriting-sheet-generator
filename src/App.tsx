@@ -93,74 +93,79 @@ function App() {
         </nav>
       </section>
       <section className="Settings">
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Font</span>
-          </label>
-          <select
-            onChange={(event) => {
-              setCurrentFont(
-                fonts.find((font) => event.target.value === font.fontFamily) ||
-                  fonts[0]
-              );
-            }}
-            className="select select-bordered"
-          >
-            {fonts.map((font) => {
-              return (
-                <option key={font.fontFamily} value={font.fontFamily}>
-                  {font.fontFamily}
-                </option>
-              );
-            })}
-          </select>
-        </div>
+        <div className="grid md:grid-cols-3 gap-1">
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Font</span>
+            </label>
+            <select
+              onChange={(event) => {
+                setCurrentFont(
+                  fonts.find(
+                    (font) => event.target.value === font.fontFamily
+                  ) || fonts[0]
+                );
+              }}
+              className="select select-bordered"
+            >
+              {fonts.map((font) => {
+                return (
+                  <option key={font.fontFamily} value={font.fontFamily}>
+                    {font.fontFamily}
+                  </option>
+                );
+              })}
+            </select>
+          </div>
 
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Blank lines</span>
-          </label>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            type="number"
-            name="blankLines"
-            value={blankLines}
-            onChange={(event) => {
-              setBlankLines(Math.max(parseInt(event.target.value, 10), 0) || 0);
-            }}
-          />
-        </div>
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Blank lines</span>
+            </label>
+            <input
+              className="input input-bordered w-full max-w-xs"
+              type="number"
+              name="blankLines"
+              value={blankLines}
+              onChange={(event) => {
+                setBlankLines(
+                  Math.max(parseInt(event.target.value, 10), 0) || 0
+                );
+              }}
+            />
+          </div>
 
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Max characters per line</span>
-          </label>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            type="number"
-            value={maxCharacters}
-            onChange={(event) => {
-              setMaxCharacters(
-                Math.max(parseInt(event.target.value, 10), 0) || 45
-              );
-            }}
-          />
-        </div>
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Max characters per line</span>
+            </label>
+            <input
+              className="input input-bordered w-full max-w-xs"
+              type="number"
+              value={maxCharacters}
+              onChange={(event) => {
+                setMaxCharacters(
+                  Math.max(parseInt(event.target.value, 10), 0) || 45
+                );
+              }}
+            />
+          </div>
 
-        <div className="form-control w-full max-w-xs">
-          <label className="label">
-            <span className="label-text">Word spacing</span>
-          </label>
-          <input
-            className="input input-bordered w-full max-w-xs"
-            type="number"
-            value={wordSpacing}
-            onChange={(event) => {
-              setWordSpacing(
-                Math.max(parseInt(event.target.value, 10), 0) || 7
-              );
-            }}
-          />
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Word spacing</span>
+            </label>
+            <input
+              className="input input-bordered w-full max-w-xs"
+              type="number"
+              value={wordSpacing}
+              onChange={(event) => {
+                setWordSpacing(
+                  Math.max(parseInt(event.target.value, 10), 0) || 7
+                );
+              }}
+            />
+          </div>
         </div>
 
         <div className="form-control">
@@ -217,20 +222,22 @@ function App() {
               </div>
             );
           })}
-          {Array.from(Array(Math.max(blankLines || 0, 1)).keys()).map((index) => {
-            return (
-              <div
-                key={index}
-                className="BlankLine"
-                style={{
-                  fontFamily: currentFont.fontFamily,
-                  marginBottom: currentFont.marginBottom,
-                }}
-              >
-                <span>&nbsp;</span>
-              </div>
-            );
-          })}
+          {Array.from(Array(Math.max(blankLines || 0, 1)).keys()).map(
+            (index) => {
+              return (
+                <div
+                  key={index}
+                  className="BlankLine"
+                  style={{
+                    fontFamily: currentFont.fontFamily,
+                    marginBottom: currentFont.marginBottom,
+                  }}
+                >
+                  <span>&nbsp;</span>
+                </div>
+              );
+            }
+          )}
         </main>
       )}
     </div>
