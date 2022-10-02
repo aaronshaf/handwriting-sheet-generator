@@ -73,6 +73,7 @@ function App() {
     "wordSpacing",
     7
   );
+  const [darkness, setDarkness] = useLocalStorage<number>("darkness", 100);
 
   const lines = splitter(text || "", maxCharacters || 45);
 
@@ -92,8 +93,8 @@ function App() {
           </div>
         </nav>
       </section>
-      <section className="Settings">
-        <div className="grid md:grid-cols-3 gap-1">
+      <section className="Settings mb-4">
+        <div className="grid md:grid-cols-3 gap-1 mb-2 md:mb-1">
           <div className="form-control w-full max-w-xs">
             <label className="label">
               <span className="label-text">Font</span>
@@ -125,8 +126,10 @@ function App() {
             <input
               className="input input-bordered w-full max-w-xs"
               type="number"
+              min={0}
+              step={1}
               name="blankLines"
-              value={blankLines}
+              defaultValue={blankLines}
               onChange={(event) => {
                 setBlankLines(
                   Math.max(parseInt(event.target.value, 10), 0) || 0
@@ -142,7 +145,9 @@ function App() {
             <input
               className="input input-bordered w-full max-w-xs"
               type="number"
-              value={maxCharacters}
+              min={0}
+              step={1}
+              defaultValue={maxCharacters}
               onChange={(event) => {
                 setMaxCharacters(
                   Math.max(parseInt(event.target.value, 10), 0) || 45
@@ -158,11 +163,31 @@ function App() {
             <input
               className="input input-bordered w-full max-w-xs"
               type="number"
-              value={wordSpacing}
+              min={0}
+              step={1}
+              defaultValue={wordSpacing}
               onChange={(event) => {
                 setWordSpacing(
                   Math.max(parseInt(event.target.value, 10), 0) || 7
                 );
+              }}
+            />
+          </div>
+
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Darkness</span>
+            </label>
+            <input
+              className="input input-bordered w-full max-w-xs"
+              type="number"
+              min={0}
+              max={100}
+              step={1}
+              defaultValue={darkness}
+              onChange={(event) => {
+                const integer = parseInt(event.target.value, 10) || 100;
+                setDarkness(Math.min(Math.max(integer, 10), 100));
               }}
             />
           </div>
@@ -173,14 +198,13 @@ function App() {
             <span className="label-text">Text</span>
           </label>
           <textarea
+            defaultValue={text}
             className="textarea textarea-bordered h-24"
             placeholder="Text"
             onChange={(event) => {
               setText(event.target.value);
             }}
-          >
-            {text}
-          </textarea>
+          ></textarea>
         </div>
       </section>
 
@@ -193,6 +217,7 @@ function App() {
           }}
         >
           {lines.map((line, index) => {
+            const colorNumber = 255 - ((darkness || 0) / 100) * 255;
             return (
               <div key={index} className="Line">
                 <div
@@ -201,6 +226,7 @@ function App() {
                     fontFamily: currentFont.fontFamily,
                     marginBottom: currentFont.marginBottom,
                     wordSpacing: `${wordSpacing}px`,
+                    color: `rgb(${colorNumber}, ${colorNumber}, ${colorNumber})`,
                   }}
                 >
                   <span>{line || <>&nbsp;</>}</span>
