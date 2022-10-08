@@ -62,8 +62,8 @@ const fonts: Font[] = [
 ];
 
 function App() {
-  const [text, setText] = useLocalStorage("text", "");
-  const [currentFont, setCurrentFont] = useState<Font>(fonts[0]);
+  const [currentFontFamily, setCurrentFontFamily] = useLocalStorage("text", "");
+  const [text, setText] = useLocalStorage("fontFamily", "HomemadeApple");
   const [blankLines, setBlankLines] = useLocalStorage<number>("blankLines", 1);
   const [maxCharacters, setMaxCharacters] = useLocalStorage<number>(
     "maxCharacters",
@@ -74,6 +74,8 @@ function App() {
     7
   );
   const [darkness, setDarkness] = useLocalStorage<number>("darkness", 100);
+
+  const currentFont = fonts.find((f) => f.fontFamily === currentFontFamily) || fonts[0];
 
   const lines = splitter(text || "", maxCharacters || 45);
 
@@ -101,12 +103,9 @@ function App() {
             </label>
             <select
               onChange={(event) => {
-                setCurrentFont(
-                  fonts.find(
-                    (font) => event.target.value === font.fontFamily
-                  ) || fonts[0]
-                );
+                setCurrentFontFamily(event.target.value);
               }}
+              defaultValue={currentFontFamily}
               className="select select-bordered"
             >
               {fonts.map((font) => {
