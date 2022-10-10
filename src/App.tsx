@@ -80,7 +80,7 @@ function App() {
     fonts.find((f) => f.fontFamily === settings.fontFamily) || fonts[0];
 
   const lines = splitter(
-    settings.text || "",
+    settings.text.trim() || "",
     parseInt(settings.maxCharacters, 10) || 45
   );
 
@@ -271,9 +271,7 @@ function App() {
               </div>
             );
           })}
-          {Array.from(
-            Array(Math.max(parseInt(settings.blankLines, 10) || 0, 1)).keys()
-          ).map((index) => {
+          {Array.from(Array(1).keys()).map((index) => {
             return (
               <div
                 key={index}
