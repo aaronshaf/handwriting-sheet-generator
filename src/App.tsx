@@ -91,7 +91,10 @@ function App() {
       <section className="Nav">
         <nav className="navbar bg-base-300">
           <div className="navbar-start">
-            <a className="btn btn-ghost normal-case text-xl">
+            <a
+              href="/handwriting-worksheet-generator/"
+              className="btn btn-ghost normal-case text-xl"
+            >
               Handwriting Worksheet Generator
             </a>
           </div>
