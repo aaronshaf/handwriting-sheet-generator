@@ -203,7 +203,7 @@ function App() {
               defaultValue={settings.darkness}
               onChange={(event) => {
                 const integer = parseInt(event.target.value, 10) || 100;
-                const darkness = String(Math.min(Math.max(integer, 10), 100));
+                const darkness = String(Math.min(Math.max(integer, 1), 100));
                 setSearchParams({ ...settings, darkness });
               }}
             />
