@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useLocalStorage } from "react-use";
+import { useSearchParams } from "react-router-dom";
 import "./App.css";
 
 function splitter(str: string, l: number) {
@@ -61,23 +60,31 @@ const fonts: Font[] = [
   },
 ];
 
+const getSettings = (searchParams: URLSearchParams) => {
+  const params = new URLSearchParams(searchParams.toString());
+  const darkness = params.get("darkness") || "100";
+  const fontFamily = params.get("fontFamily") || "HomemadeApple";
+  const blankLines = params.get("blankLines") || "1";
+  const wordSpacing = params.get("wordSpacing") || "7";
+  const maxCharacters = params.get("maxCharacters") || "45";
+  const text = params.get("text") || "";
+  return { darkness, fontFamily, blankLines, wordSpacing, maxCharacters, text };
+};
+
 function App() {
-  const [currentFontFamily, setCurrentFontFamily] = useLocalStorage("text", "");
-  const [text, setText] = useLocalStorage("fontFamily", "HomemadeApple");
-  const [blankLines, setBlankLines] = useLocalStorage<number>("blankLines", 1);
-  const [maxCharacters, setMaxCharacters] = useLocalStorage<number>(
-    "maxCharacters",
-    45
-  );
-  const [wordSpacing, setWordSpacing] = useLocalStorage<number>(
-    "wordSpacing",
-    7
-  );
-  const [darkness, setDarkness] = useLocalStorage<number>("darkness", 100);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const currentFont = fonts.find((f) => f.fontFamily === currentFontFamily) || fonts[0];
+  const settings = getSettings(searchParams);
 
-  const lines = splitter(text || "", maxCharacters || 45);
+  const currentFont =
+    fonts.find((f) => f.fontFamily === settings.fontFamily) || fonts[0];
+
+  const lines = splitter(
+    settings.text || "",
+    parseInt(settings.maxCharacters, 10) || 45
+  );
+
+  console.log(searchParams.get("fontFamily"));
 
   return (
     <div className="App">
@@ -103,9 +110,12 @@ function App() {
             </label>
             <select
               onChange={(event) => {
-                setCurrentFontFamily(event.target.value);
+                setSearchParams({
+                  ...settings,
+                  fontFamily: event.target.value,
+                });
               }}
-              defaultValue={currentFontFamily}
+              defaultValue={settings.fontFamily}
               className="select select-bordered"
             >
               {fonts.map((font) => {
@@ -128,11 +138,12 @@ function App() {
               min={0}
               step={1}
               name="blankLines"
-              defaultValue={blankLines}
+              defaultValue={settings.blankLines}
               onChange={(event) => {
-                setBlankLines(
-                  Math.max(parseInt(event.target.value, 10), 0) || 0
-                );
+                setSearchParams({
+                  ...settings,
+                  blankLines: String(event.target.value),
+                });
               }}
             />
           </div>
@@ -146,11 +157,14 @@ function App() {
               type="number"
               min={0}
               step={1}
-              defaultValue={maxCharacters}
+              defaultValue={settings.maxCharacters}
               onChange={(event) => {
-                setMaxCharacters(
-                  Math.max(parseInt(event.target.value, 10), 0) || 45
-                );
+                setSearchParams({
+                  ...settings,
+                  maxCharacters: String(
+                    Math.max(parseInt(event.target.value, 10), 0) || 45
+                  ),
+                });
               }}
             />
           </div>
@@ -164,11 +178,14 @@ function App() {
               type="number"
               min={0}
               step={1}
-              defaultValue={wordSpacing}
+              defaultValue={settings.wordSpacing}
               onChange={(event) => {
-                setWordSpacing(
-                  Math.max(parseInt(event.target.value, 10), 0) || 7
-                );
+                setSearchParams({
+                  ...settings,
+                  wordSpacing: String(
+                    Math.max(parseInt(event.target.value, 10), 0) || 7
+                  ),
+                });
               }}
             />
           </div>
@@ -183,10 +200,11 @@ function App() {
               min={0}
               max={100}
               step={1}
-              defaultValue={darkness}
+              defaultValue={settings.darkness}
               onChange={(event) => {
                 const integer = parseInt(event.target.value, 10) || 100;
-                setDarkness(Math.min(Math.max(integer, 10), 100));
+                const darkness = String(Math.min(Math.max(integer, 10), 100));
+                setSearchParams({ ...settings, darkness });
               }}
             />
           </div>
@@ -197,17 +215,17 @@ function App() {
             <span className="label-text">Text</span>
           </label>
           <textarea
-            defaultValue={text}
+            defaultValue={settings.text}
             className="textarea textarea-bordered h-24"
             placeholder="Text"
             onChange={(event) => {
-              setText(event.target.value);
+              setSearchParams({ ...settings, text: event.target.value });
             }}
           ></textarea>
         </div>
       </section>
 
-      {(text || "").length > 0 && (
+      {(settings.text || "").length > 0 && (
         <main
           className="Notebook"
           style={{
@@ -216,7 +234,8 @@ function App() {
           }}
         >
           {lines.map((line, index) => {
-            const colorNumber = 255 - ((darkness || 0) / 100) * 255;
+            const colorNumber =
+              255 - ((parseInt(settings.darkness, 10) || 0) / 100) * 255;
             return (
               <div key={index} className="Line">
                 <div
@@ -224,13 +243,13 @@ function App() {
                   style={{
                     fontFamily: currentFont.fontFamily,
                     marginBottom: currentFont.marginBottom,
-                    wordSpacing: `${wordSpacing}px`,
+                    wordSpacing: `${settings.wordSpacing}px`,
                     color: `rgb(${colorNumber}, ${colorNumber}, ${colorNumber})`,
                   }}
                 >
                   <span>{line || <>&nbsp;</>}</span>
                 </div>
-                {Array.from(Array(blankLines).keys()).map((index) => {
+                {Array.from(Array(settings.blankLines).keys()).map((index) => {
                   return (
                     <div
                       key={index}
@@ -247,22 +266,22 @@ function App() {
               </div>
             );
           })}
-          {Array.from(Array(Math.max(blankLines || 0, 1)).keys()).map(
-            (index) => {
-              return (
-                <div
-                  key={index}
-                  className="BlankLine"
-                  style={{
-                    fontFamily: currentFont.fontFamily,
-                    marginBottom: currentFont.marginBottom,
-                  }}
-                >
-                  <span>&nbsp;</span>
-                </div>
-              );
-            }
-          )}
+          {Array.from(
+            Array(Math.max(parseInt(settings.blankLines, 10) || 0, 1)).keys()
+          ).map((index) => {
+            return (
+              <div
+                key={index}
+                className="BlankLine"
+                style={{
+                  fontFamily: currentFont.fontFamily,
+                  marginBottom: currentFont.marginBottom,
+                }}
+              >
+                <span>&nbsp;</span>
+              </div>
+            );
+          })}
         </main>
       )}
     </div>
