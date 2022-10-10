@@ -141,7 +141,7 @@ function App() {
               min={0}
               step={1}
               name="blankLines"
-              defaultValue={settings.blankLines}
+              defaultValue={parseInt(settings.blankLines, 10)}
               onChange={(event) => {
                 setSearchParams({
                   ...settings,
@@ -252,7 +252,9 @@ function App() {
                 >
                   <span>{line || <>&nbsp;</>}</span>
                 </div>
-                {Array.from(Array(settings.blankLines).keys()).map((index) => {
+                {Array.from(
+                  Array(parseInt(settings.blankLines, 10)).keys()
+                ).map((index) => {
                   return (
                     <div
                       key={index}
